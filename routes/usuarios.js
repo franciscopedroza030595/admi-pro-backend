@@ -5,7 +5,7 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 /* importo validar campos middleware personalizado */
 const { validarCampos } = require('../middlewares/validar-campos');
-
+/* importo el uso de JWT */
 const { validarJWT } = require('../middlewares/validar-jwt');
 
 const { getUsuarios, crearUsuario, actualizarUsuario, borrarUsuario } = require('../controllers/usuarios');

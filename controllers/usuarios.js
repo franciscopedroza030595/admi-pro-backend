@@ -13,12 +13,32 @@ const { generarJWT } = require('../helpers/jwt');
 
 const getUsuarios = async(req, res) => {
 
-    const usuarios = await Usuario.find({}, 'nombre email role google');
+    /* voy a crear una paginacion para traer eje registro del 5 al 10 y no todos en postman ?desde-5 (? es opcional va en postman ?desde=5)*/
+    const desde = Number(req.query.desde) || 0;
+
+
+    /* ----------------- */
+
+    /*  voy a hacer un promise.all para que se ejecute ambos procesos, es mucho mas eficiente de esta manera */
+    const [usuarios, total] = await Promise.all([
+        Usuario.find({}, 'nombre email role google img').skip(desde).limit(5),
+
+        Usuario.countDocuments()
+
+    ]);
+
+    /* ----------------------------------------------------------------------- */
+    /*  const usuarios = await Usuario.find({}, 'nombre email role google').skip(desde).limit(5); // aqui aplico la paginacion desde el numero que mande hasta 5 despues
+
+     const total = await Usuario.count(); // este es el total d registros de ususarios */
+
+    /* -------------------------------------------- */
 
     res.json({
         ok: true,
         usuarios,
-        uid: req.uid // se configurio en el middleware validar jws y se llama en la ruta primero probar con postman 
+        uid: req.uid, // se configurio en el middleware validar jws y se llama en la ruta primero probar con postman 
+        total
     });
 }
 

@@ -31,6 +31,15 @@ dbConnection();
 app.use('/api/usuarios', require('./routes/usuarios'));
 /* creo nueva ruta para el login */
 app.use('/api/login', require('./routes/auth'));
+/* ruta de hospitales */
+app.use('/api/hospitales', require('./routes/hospitales'));
+/* ruta de medicos */
+app.use('/api/medicos', require('./routes/medicos'));
+/* ruta para busqueda */
+app.use('/api/todo', require('./routes/busquedas'));
+/* ruta para uploads */
+app.use('/api/upload', require('./routes/uploads'));
+
 
 
 

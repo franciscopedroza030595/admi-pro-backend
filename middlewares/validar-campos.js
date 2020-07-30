@@ -1,5 +1,5 @@
 const { response } = require('express');
-/* exporto validation result */
+/* importo validation result */
 const { validationResult } = require('express-validator');
 
 const validarCampos = (req, res, next) => {
