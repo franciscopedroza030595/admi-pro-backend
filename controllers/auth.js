@@ -126,7 +126,25 @@ const googleSignIn = async(req, res = response) => {
     }
 }
 
+/* creo el de renwe token */
+
+const renewToken = async(req, res = response) => {
+
+    const uid = req.uid;
+    /* es el token que se debe grabar en el local storage para renovar el token, recordar que el token tiene 12h de vigencia  */
+    // generar un TOKEN - JWT
+
+    const token = await generarJWT(uid);
+
+    res.json({
+        ok: true,
+        token
+    });
+
+}
+
 module.exports = {
     login,
-    googleSignIn
+    googleSignIn,
+    renewToken
 }
