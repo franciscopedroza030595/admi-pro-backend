@@ -3,7 +3,7 @@
 */
 
 const { Router } = require('express');
-const { login } = require('../controllers/auth');
+const { login, googleSignIn } = require('../controllers/auth');
 /* voy a importar express validators */
 const { check } = require('express-validator');
 /* importo validar campos middleware personalizado */
@@ -17,6 +17,14 @@ router.post('/', [
     check('password', 'El password es obligatorio').not().isEmpty(),
     validarCampos
 ], login);
+
+/* con GOOGLE */
+
+router.post('/google', [
+    check('token', 'El token es obligatorio').not().isEmpty(),
+
+    validarCampos
+], googleSignIn);
 
 
 

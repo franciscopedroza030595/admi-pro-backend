@@ -5,6 +5,7 @@ const Usuario = require('../models/usuario');
 const bcrypt = require('bcryptjs');
 
 const { generarJWT } = require('../helpers/jwt');
+const { googleVerify } = require('../helpers/google-verify');
 
 
 
@@ -57,6 +58,75 @@ const login = async(req, res = response) => {
 
 }
 
+/* autenticacion de GOOGLE */
+
+
+const googleSignIn = async(req, res = response) => {
+
+
+    const googleToken = req.body.token;
+
+
+
+
+    /* res.json({
+        ok: true,
+        msg: 'google Sign in'
+
+    }); */
+
+    try {
+
+
+        const { name, email, picture } = await googleVerify(googleToken);
+
+        /* verifico si ya existe el usuario con ese email */
+        const usuarioDB = await Usuario.findOne({ email });
+
+        let usuario;
+
+        if (!usuarioDB) {
+
+            usuario = new Usuario({
+                nombre: name,
+                email,
+                password: '@@@',
+                img: picture,
+                google: true
+            });
+        } else { // si existe el ususario es que paso de user pass a google
+            usuario = usuarioDB;
+            usuario.google = true;
+            usuario.password = '@@@'; // se cambia la contrasena para que solo pueda entar por google , se puede no cambiar para tener ambos ingresos
+
+        }
+
+        //guardar en base de datos
+
+        await usuario.save();
+
+        // generar un TOKEN - JWT
+
+        const token = await generarJWT(usuarioDB.id);
+
+
+        res.json({
+            ok: true,
+            token: token
+        });
+
+
+    } catch (error) {
+
+        res.json({
+            ok: false,
+            msg: 'token no es correcto'
+        });
+
+    }
+}
+
 module.exports = {
-    login
+    login,
+    googleSignIn
 }

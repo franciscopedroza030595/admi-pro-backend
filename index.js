@@ -25,6 +25,8 @@ dbConnection();
 // user: mean_user
 //passwoord: AgIa6va1yy1yVqCv
 
+/* DIRECTORIO PUBLICO PARA PRUEBAS DE GOOGLE SIGN IN */
+app.use(express.static('public'));
 
 /* rutas */
 
